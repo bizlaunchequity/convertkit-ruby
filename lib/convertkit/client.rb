@@ -7,24 +7,24 @@ require "json"
 module Convertkit
   class Client
     include Subscribers
-    
+
     attr_accessor :api_secret, :api_key
-    
-    def initialize
-      @api_secret = Convertkit.configuration.api_secret
-      @api_key = Convertkit.configuration.api_key
-      
+
+    def initialize(options = {})
+      @api_secret = options[:api_secret].presence || Convertkit.configuration.api_secret
+      @api_key = options[:api_key].presence || Convertkit.configuration.api_key
+
       yield (self) if block_given?
     end
-    
+
     def generate_resource(key, *args)
       { key => args }
     end
-    
+
     def content_type
       'application/vnd.api+json'
     end
-    
+
     def get(url, options = {})
       build_response do
         connection.get do |req|
@@ -33,7 +33,7 @@ module Convertkit
         end
       end
     end
-    
+
     def post(url, options = {})
       build_response do
         connection.post do |req|
@@ -42,7 +42,7 @@ module Convertkit
         end
       end
     end
-    
+
     def put(url, options = {})
       build_response do
         connection.put do |req|
@@ -51,7 +51,7 @@ module Convertkit
         end
       end
     end
-    
+
     def delete(url, options = {})
       build_response do
         connection.delete do |req|
@@ -60,24 +60,24 @@ module Convertkit
         end
       end
     end
-    
+
     def build_response(&block)
       response = yield
       Convertkit::Response.new(response.status, response.body)
     end
-    
+
     def connection
       @connection ||= Faraday.new do |f|
         f.adapter :net_http
         f.url_prefix = "https://api.convertkit.com/v3/"
-        
+
         f.headers['User-Agent'] = "Convertkit Ruby v#{Convertkit::VERSION}"
         f.headers['Content-Type'] = content_type
         f.headers['Accept'] = "*/*"
 
         f.params['api_secret'] = api_secret
         f.params['api_key'] = api_key
-        
+
         f.response :json, content_type: /\bjson$/
       end
     end
