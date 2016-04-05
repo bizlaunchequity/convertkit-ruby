@@ -38,7 +38,7 @@ module Convertkit
       build_response do
         connection.post do |req|
           req.url url
-          req.body = options.to_json
+          req.params.merge!(options)
         end
       end
     end
