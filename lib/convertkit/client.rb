@@ -29,7 +29,7 @@ module Convertkit
       build_response do
         connection.get do |req|
           req.url url
-          req.params = options
+          req.params.merge!(options)
         end
       end
     end
