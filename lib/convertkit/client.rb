@@ -11,8 +11,8 @@ module Convertkit
     attr_accessor :api_secret, :api_key
 
     def initialize(options = {})
-      @api_secret = options[:api_secret].presence || Convertkit.configuration.api_secret
-      @api_key = options[:api_key].presence || Convertkit.configuration.api_key
+      @api_secret = options[:api_secret] || Convertkit.configuration.api_secret
+      @api_key = options[:api_key] || Convertkit.configuration.api_key
 
       yield (self) if block_given?
     end
