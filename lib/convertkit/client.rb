@@ -1,7 +1,6 @@
 require "convertkit/response"
 require "convertkit/client/subscribers"
 require "faraday"
-require "faraday_middleware"
 require "json"
 
 module Convertkit
@@ -71,7 +70,7 @@ module Convertkit
         f.adapter :net_http
         f.url_prefix = "https://api.convertkit.com/v3/"
 
-        f.headers['User-Agent'] = "Convertkit Ruby v#{Convertkit::VERSION}"
+        f.headers['User-Agent'] = "Convertkit"
         f.headers['Content-Type'] = content_type
         f.headers['Accept'] = "*/*"
 
